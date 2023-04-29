@@ -28,6 +28,10 @@ string Directory::help() {
     return "Commands:\ncd -n: Change directory, changes directory to said -n, name of directory\n";
 }
 
+void Directory::add(string name)
+{
+}
+
 void Directory::create(string name) {
     directories.push_back(Directory(name));
 }
@@ -46,21 +50,24 @@ void Directory::del(string name) {
 }
 
 
-void add(string name) {
-    //fill in later
-}
-
 Directory* Directory::cd(string name) {
-    for (auto& dir : directories) {
-        if (dir.thisName == name) {
-            return &dir;
+    if (name == "..") {
+        return parent;
+    }
+    else {
+        for (auto& dir : directories) {
+            if (dir.thisName == name) {
+                return &dir;
+            }
         }
     }
-    return nullptr;
+    cout << "Directory not found";
+    return this;
 }
 
 
-Directory Directory::find(string name) {
+
+Directory* Directory::find(string name) {
     if (thisName == name) {
         return this;
     }
@@ -73,4 +80,8 @@ Directory Directory::find(string name) {
         }
     }
     return nullptr;
+}
+
+void Directory::setParent(Directory* parentDir){
+    this->parent = parentDir;
 }

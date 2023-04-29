@@ -27,13 +27,15 @@ public:
     Directory* cd(string name);
     string list();
     string help();
-    Directory find(string name);
-
+    Directory* find(string name);
+    void setParent(Directory* parent);
+    
 
 private:
     // Declare any private member variables here
     std::vector<Directory> directories;
     string thisName;
+    Directory* parent;
 };
 
 
