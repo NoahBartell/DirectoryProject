@@ -3,12 +3,17 @@
 #include <cstring>
 #include <string>
 #include <vector>
-#include <algorithm>a
+#include <algorithm>
 
 Directory::Directory(string name) {
     thisName = name;
-    //directories.push_back(*this);
-    cout << "Created directory with name: " << thisName << endl;
+    parent = nullptr;
+    //cout << "Created directory with name: " << thisName << endl;
+}
+
+Directory::Directory(string name, Directory* parentDir) {
+    thisName = name;
+    parent = parentDir;
 }
 //Methods
 int Directory::init() {
@@ -16,7 +21,7 @@ int Directory::init() {
 }
 
 string Directory::list() {
-    string stringbuilder = "Current Directory: " + this->thisName + "\nSubdirectories:";
+    string stringbuilder = "Current Directory: " + this->thisName + "\nSubdirectories:\n";
     for (Directory dir : directories) {
         stringbuilder += dir.thisName;
         stringbuilder += "\n";
@@ -32,9 +37,13 @@ void Directory::add(string name)
 {
 }
 
-void Directory::create(string name) {
-    directories.push_back(Directory(name));
+void Directory::create(string name, Directory* dirPtr) {
+    directories.push_back(Directory(name, dirPtr));
 }
+
+//void Directory::create(string name) {
+//    directories.emplace_back(name, this);
+//}
 
 
 void Directory::del(string name) {
@@ -42,7 +51,9 @@ void Directory::del(string name) {
         [name](const Directory& dir) { return dir.thisName == name; });
 
     if (foundDirIter != directories.end()) {
+        Directory* dirToDelete = &(*foundDirIter);
         directories.erase(foundDirIter);
+        delete dirToDelete;
     }
     else {
         // directory not found
@@ -51,7 +62,7 @@ void Directory::del(string name) {
 
 
 Directory* Directory::cd(string name) {
-    if (name == "..") {
+    if (name == ".." && parent != nullptr) {
         return parent;
     }
     else {
@@ -61,7 +72,7 @@ Directory* Directory::cd(string name) {
             }
         }
     }
-    cout << "Directory not found";
+    cout << "Directory not found\n";
     return this;
 }
 

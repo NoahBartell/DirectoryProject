@@ -1,6 +1,6 @@
 #pragma once
-#ifndef DIRECTORY_HPP
-#define DIRECTORY_HPP
+#ifndef DIRECTORY_H
+#define DIRECTORY_H
 
 #include <iostream>
 #include <vector>
@@ -17,12 +17,13 @@ public:
     // Declare any public member functions here
     // constructors
     Directory(string name);
+    Directory(string name, Directory* parentDir);
 
     // Methods
     int init();
     //void mv();
     void add(string name);
-    void create(string name);
+    void create(string name, Directory* dirPtr);
     void del(string name);
     Directory* cd(string name);
     string list();
