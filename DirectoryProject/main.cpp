@@ -76,7 +76,12 @@ int main() {
             cin >> name;
             myDirPtr = myDirPtr->cd(name);
         }
-        cout << "Enter a command: ";
+
+        if (command == "ex") {
+            cout << myDirPtr->DirString(myDirPtr);
+        }
+
+        cout <<  myDirPtr->DirString(myDirPtr) << ">";
         cin >> command;
     }
     return 0;

@@ -96,3 +96,37 @@ Directory* Directory::find(string name) {
 void Directory::setParent(Directory* parentDir){
     this->parent = parentDir;
 }
+
+string Directory::DirString(Directory* current)
+{
+    string stringBuilder = "";
+    //stringBuilder += current->thisName;
+    string temp = "";
+    Directory* tempPtr = current;
+    while (tempPtr->getParent() != nullptr) {
+        temp = tempPtr->getParent()->thisName;
+        temp += "\\";
+        temp += stringBuilder;
+        stringBuilder = temp;
+        tempPtr = tempPtr->getParent();
+    }
+
+    temp = "C:\\";
+    temp += stringBuilder;
+    stringBuilder = temp;
+
+
+   /* if (current->getParent() != nullptr) {
+        stringBuilder += current->getParent()->thisName;
+    }*/
+    //stringBuilder += "\\";
+    stringBuilder += thisName;
+    return stringBuilder;
+}
+
+Directory* Directory::getParent()
+{
+    return this->parent;
+}
+
+

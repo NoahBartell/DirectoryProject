@@ -30,6 +30,8 @@ public:
     string help();
     Directory* find(string name);
     void setParent(Directory* parent);
+    string DirString(Directory* current);
+    Directory* getParent();
     
 
 private:
