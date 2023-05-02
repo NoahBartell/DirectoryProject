@@ -28,17 +28,19 @@ public:
     Directory* cd(string name);
     string list();
     string help();
-    Directory* find(string name);
-    void setParent(Directory* parent);
+    string help(string name);
     string DirString(Directory* current);
-    Directory* getParent();
+    
     
 
 private:
     // Declare any private member variables here
+    void setParent(Directory* parent);
+    Directory* find(string name);
     std::vector<Directory> directories;
     string thisName;
     Directory* parent;
+    Directory* getParent();
 };
 
 

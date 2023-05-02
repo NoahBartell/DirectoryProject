@@ -28,9 +28,33 @@ string Directory::list() {
     }
     return stringbuilder;
 }
-
+//: Change directory, changes directory to said -n, name of directory
 string Directory::help() {
-    return "Commands:\ncd -n: Change directory, changes directory to said -n, name of directory\n";
+    return "Commands:\ncd -n\nlist\ncreate -n\ndel -n\nhelp -n\n";
+}
+
+string Directory::help(string name)
+{
+    string result;
+    if (name == "cd") {
+        result = "cd -n: Changes directory to the name of the input. Type .. to return to parent folder\n";
+    }
+    else if (name == "list") {
+        result = "list: Shows all files and directories inside current folder\n";
+    }
+    else if (name == "create") {
+        result = "create -n: creates a directory with the name input\n";
+    }
+    else if (name == "del") {
+        result = "del -n: deletes a file or directory inside current directory\n";
+    }
+    else if (name == "help") {
+        result = "help -n: shows the commands and shows specific commands\n";
+    }
+    else {
+        result = "commands not found\n";
+    }
+    return result;
 }
 
 void Directory::add(string name)

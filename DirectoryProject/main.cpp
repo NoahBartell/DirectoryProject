@@ -43,15 +43,20 @@ string name;
 int main() {
     myDirPtr = new Directory("Main");
     
-    cout << "Enter a command, type help for list of commands" << endl;
+    cout << "Enter a command, type help! for list of commands" << endl;
     cin >> command;
     while (command != "-1"){
 
         
 
         //help
-        if (command == "help") {
+        if (command == "help!") {
             cout << myDirPtr->help();
+        }
+
+        if (command == "help") {
+            cin >> name;
+            cout << myDirPtr->help(name);
         }
 
         //create
