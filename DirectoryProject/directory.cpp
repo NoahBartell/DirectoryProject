@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 
+//Constructors
 Directory::Directory(string name) {
     thisName = name;
     parent = nullptr;
@@ -15,11 +16,9 @@ Directory::Directory(string name, Directory* parentDir) {
     thisName = name;
     parent = parentDir;
 }
-//Methods
-int Directory::init() {
-    return 0;
-}
 
+//Methods
+//List lists all items in directory
 string Directory::list() {
     string stringbuilder = "Current Directory: " + this->thisName + "\nSubdirectories:\n";
     for (Directory dir : directories) {
@@ -28,11 +27,13 @@ string Directory::list() {
     }
     return stringbuilder;
 }
-//: Change directory, changes directory to said -n, name of directory
+
+//returns list of commands
 string Directory::help() {
     return "Commands:\ncd -n\nlist\ncreate -n\ndel -n\nhelp -n\n";
 }
 
+//gives more details about a specific command
 string Directory::help(string name)
 {
     string result;
@@ -57,6 +58,7 @@ string Directory::help(string name)
     return result;
 }
 
+//will add a file to directory
 void Directory::add(string name)
 {
 }
@@ -64,10 +66,6 @@ void Directory::add(string name)
 void Directory::create(string name, Directory* dirPtr) {
     directories.push_back(Directory(name, dirPtr));
 }
-
-//void Directory::create(string name) {
-//    directories.emplace_back(name, this);
-//}
 
 
 void Directory::del(string name) {
@@ -80,7 +78,7 @@ void Directory::del(string name) {
         delete dirToDelete;
     }
     else {
-        // directory not found
+        cout << "directory not found" << endl;
     }
 }
 
@@ -96,13 +94,13 @@ Directory* Directory::cd(string name) {
             }
         }
     }
-    cout << "Directory not found\n";
+    cout << "Directory not found" << endl;
     return this;
 }
 
 
 
-Directory* Directory::find(string name) {
+Directory* Directory::find(string name) { //finds directory in vector via name
     if (thisName == name) {
         return this;
     }
@@ -124,26 +122,20 @@ void Directory::setParent(Directory* parentDir){
 string Directory::DirString(Directory* current)
 {
     string stringBuilder = "";
-    //stringBuilder += current->thisName;
     string temp = "";
     Directory* tempPtr = current;
-    while (tempPtr->getParent() != nullptr) {
+    while (tempPtr->getParent() != nullptr) { //does this until gets to master dir whos parent is nullptr
         temp = tempPtr->getParent()->thisName;
         temp += "\\";
-        temp += stringBuilder;
+        temp += stringBuilder; // puts the dir name before current
         stringBuilder = temp;
         tempPtr = tempPtr->getParent();
     }
 
     temp = "C:\\";
-    temp += stringBuilder;
+    temp += stringBuilder; //puts c:\ at the beginning of string
     stringBuilder = temp;
 
-
-   /* if (current->getParent() != nullptr) {
-        stringBuilder += current->getParent()->thisName;
-    }*/
-    //stringBuilder += "\\";
     stringBuilder += thisName;
     return stringBuilder;
 }

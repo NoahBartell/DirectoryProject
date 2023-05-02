@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include "file.h"
 
 using namespace std;
 
@@ -20,7 +21,6 @@ public:
     Directory(string name, Directory* parentDir);
 
     // Methods
-    int init();
     //void mv();
     void add(string name);
     void create(string name, Directory* dirPtr);
