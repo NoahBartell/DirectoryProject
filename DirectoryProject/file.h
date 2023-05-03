@@ -16,15 +16,17 @@ class File
 public:
     // Declare any public member functions here
     // constructors
-    File();
+    File(string name); //Constructs file with name
     // Methods
-    string read();
-
+    string read(); //Sends back contents
+    void write(string text); //Enters value into contents
+    string myName; //Files name
+    string contents; //Contents of file
 
 private:
     // Declare any private member variables here
-    string contents;
+    
 };
 
 
-#endif // MYHEADER_H
+#endif // FILE_H

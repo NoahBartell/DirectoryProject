@@ -1,7 +1,9 @@
 #include<iostream>
 #include<cmath>
 #include <cstring>
+#include <string>
 #include "directory.h"
+#include "file.h"
 
 using namespace std;
 
@@ -32,18 +34,24 @@ create -n
 del -n
 help
 list
-
+add -n
+load -n
+read
+write -n
 */
 
 //Public
 Directory* myDirPtr; // the pointer to the currently selected directory
-string command;
-string name;
+string command; //Changing command string
+string name; //changing name string
+File* filePtr; //Pointer to the current loaded file
 
 int main() {
+
     myDirPtr = new Directory("Main");
     
     cout << "Enter a command, type help! for list of commands" << endl;
+    cout << myDirPtr->DirString(myDirPtr) << ">";
     cin >> command;
     while (command != "-1"){
 
@@ -80,10 +88,50 @@ int main() {
         if (command == "cd") {
             cin >> name;
             myDirPtr = myDirPtr->cd(name);
+            filePtr = nullptr;
         }
 
-        if (command == "ex") {
-            cout << myDirPtr->DirString(myDirPtr);
+        //Add
+        if (command == "add") {
+            cin >> name;
+            myDirPtr->add(name);
+        }
+        
+        //Load
+        if (command == "load") {
+            filePtr = nullptr;
+            cin >> name;
+            filePtr = myDirPtr->load(name);
+            if (filePtr != nullptr) {
+                cout << "File Loaded\n";
+            }
+            else {
+                cout << "File not found\n";
+            }
+        }
+
+        //Read
+        if (command == "read") {
+            if (filePtr != nullptr) {
+                cout << filePtr->contents << "\n";
+            }
+            else {
+                cout << "File not loaded\n";
+            }
+        }
+
+        //Write
+        if (command == "write") {
+            if (filePtr != nullptr) {
+                cout << "Enter file contents\n";
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::getline(std::cin, name);
+                filePtr->write(name);
+                cout << "Contents added\n";
+            }
+            else {
+                cout << "File not loaded\n";
+            }
         }
 
         cout <<  myDirPtr->DirString(myDirPtr) << ">";

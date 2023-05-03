@@ -5,11 +5,11 @@
 #include <vector>
 #include <algorithm>
 
+
 //Constructors
 Directory::Directory(string name) {
     thisName = name;
     parent = nullptr;
-    //cout << "Created directory with name: " << thisName << endl;
 }
 
 Directory::Directory(string name, Directory* parentDir) {
@@ -25,12 +25,17 @@ string Directory::list() {
         stringbuilder += dir.thisName;
         stringbuilder += "\n";
     }
+    stringbuilder += "Files:\n";
+    for (File file : files) {
+        stringbuilder += file.myName;
+        stringbuilder += "\n";
+    }
     return stringbuilder;
 }
 
 //returns list of commands
 string Directory::help() {
-    return "Commands:\ncd -n\nlist\ncreate -n\ndel -n\nhelp -n\n";
+    return "Commands:\ncd -n\nlist\ncreate -n\ndel -n\nhelp -n\nadd -n\nload -n\nread\nwrite -m\n";
 }
 
 //gives more details about a specific command
@@ -52,6 +57,18 @@ string Directory::help(string name)
     else if (name == "help") {
         result = "help -n: shows the commands and shows specific commands\n";
     }
+    else if (name == "load") {
+        result = "load -n: loads a file with name input to be read and written\n";
+    }
+    else if (name == "add") {
+        result = "add -n: adds the file name -n to the current directory\n";
+    }
+    else if (name == "read") {
+        result = "read: reads the current file contents\n";
+    }
+    else if (name == "write") {
+        result = "write -m: inputs message into file to be stored\n";
+    }
     else {
         result = "commands not found\n";
     }
@@ -59,18 +76,23 @@ string Directory::help(string name)
 }
 
 //will add a file to directory
-void Directory::add(string name)
+void Directory::add(string fileName)
 {
+    File* file = new File(fileName);
+    //cout << &file;
+    files.push_back(*file);
 }
 
-void Directory::create(string name, Directory* dirPtr) {
-    directories.push_back(Directory(name, dirPtr));
+//creates new dir
+void Directory::create(string dirName, Directory* dirPtr) {
+    Directory* dir = new Directory(dirName, dirPtr);
+    directories.push_back(*dir);
 }
 
-
-void Directory::del(string name) {
-    auto foundDirIter = find_if(directories.begin(), directories.end(),
-        [name](const Directory& dir) { return dir.thisName == name; });
+//deletes item with name -n
+void Directory::del(string dirName) {
+    auto foundDirIter = find_if(directories.begin(), directories.end(), //looks for directory first
+        [dirName](const Directory& dir) { return dir.thisName == dirName; });
 
     if (foundDirIter != directories.end()) {
         Directory* dirToDelete = &(*foundDirIter);
@@ -78,19 +100,30 @@ void Directory::del(string name) {
         delete dirToDelete;
     }
     else {
-        cout << "directory not found" << endl;
+
+        auto foundFileIter = find_if(files.begin(), files.end(),
+            [dirName](const File& file) { return file.myName == dirName; });
+
+        if (foundFileIter != files.end()) {
+            File* fileToDelete = &(*foundFileIter);
+            files.erase(foundFileIter);
+            delete fileToDelete;
+        }
+        else {
+            cout << "item not found" << endl;
+        }
     }
 }
 
 
-Directory* Directory::cd(string name) {
-    if (name == ".." && parent != nullptr) {
+Directory* Directory::cd(string dirName) {
+    if (dirName == ".." && parent != nullptr) { //If .. is sent return to parent
         return parent;
     }
     else {
         for (auto& dir : directories) {
-            if (dir.thisName == name) {
-                return &dir;
+            if (dir.thisName == dirName) {
+                return &dir;//send back the address of this directory
             }
         }
     }
@@ -100,17 +133,27 @@ Directory* Directory::cd(string name) {
 
 
 
-Directory* Directory::find(string name) { //finds directory in vector via name
-    if (thisName == name) {
+Directory* Directory::find(string dirName) { //finds directory in vector via name
+    if (thisName == dirName) {
         return this;
     }
     else {
         for (auto& dir : directories) {
-            Directory* result = dir.find(name); //calls itself over and over again to recursivly find directory
+            Directory* result = dir.find(dirName); //calls itself over and over again to recursivly find directory
             if (result != nullptr) {
                 return result;
             }
         }
+    }
+    return nullptr;
+}
+
+File* Directory::load(string fileName) { //finds directory in vector via name
+    for (File& file : files) {
+        //std::cout << &file << endl;
+        if (file.myName == fileName) {
+            return &file;
+        }  
     }
     return nullptr;
 }
